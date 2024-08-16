@@ -9,6 +9,10 @@
 
 /* Components */
 @import "./cmps/app-header.css";
+@import "./cmps/email-index.css";
+@import "./cmps/email-preview.css";
+@import "./cmps/email-filter.css";
+@import "./cmps/email-folder-list.css";
 
 
 

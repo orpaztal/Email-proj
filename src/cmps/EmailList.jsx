@@ -1,10 +1,9 @@
+import { EmailPreview } from "./EmailPreview";
 
 export function EmailList({ emails }) {
     return <section className="email-list">
             <ul>
-                {emails.map(email => <li key={email.id}>
-                    <pre>{JSON.stringify(email, null, 2)}</pre>
-                </li>)}
+                {emails.map(email => <EmailPreview key={email.id} email={email}/>)}
             </ul>
         </section>
 }

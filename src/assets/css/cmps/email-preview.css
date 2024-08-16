@@ -1,0 +1,21 @@
+.email-preview {
+    flex-direction: row;
+    display: flex;    
+    justify-content: space-between;
+}
+
+.email-left {
+    flex-direction: row;
+    display: flex; 
+}
+
+.star-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.email-date {
+    display: flex;
+    margin-left: 100px;
+}

@@ -1,13 +1,11 @@
 .app-header {
     background: #e91e63;
     color: white;
-
 }
 
 .app-header section.container {
     display: flex;
     align-items: center;
-
 }
 
 .app-header h1.logo {

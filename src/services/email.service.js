@@ -28,15 +28,21 @@ async function query(filterBy) {
     let emails = await storageService.query(STORAGE_KEY)
 
     if (filterBy) {
-        let { text = "", isRead = null } = filterBy
-        // let { status = "", text = "", isRead = null } = filterBy
+        let { status = "", txt = "", isRead = null } = filterBy
 
         emails = emails.filter(email =>
             (isRead === null || email.isRead === isRead) &&
-            email.body.toLowerCase().includes(text.toLowerCase()) &&
-            email.subject.toLowerCase().includes(text.toLowerCase())
-            //todo - add status filter inbox/sent/star/trash
+            (email.body.toLowerCase().includes(txt.toLowerCase()) || email.subject.toLowerCase().includes(txt.toLowerCase()))
         )
+
+        const filters = {
+            inbox: email => email.to === 'user@appsus.com',
+            sent: email => email.to !== 'user@appsus.com',
+            star: email => email.isStarred === true,
+            trash: email => !!email.removedAt
+        };
+    
+        return status ? emails.filter(filters[status]) : emails;
     }
     return emails
 }
@@ -61,7 +67,7 @@ function save(emailToSave) {
 function getDefaultFilter() {
     return {
         status: "", 
-        text: "", 
+        txt: "", 
         isRead: null,
     }
 }

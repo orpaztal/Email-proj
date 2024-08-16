@@ -1,13 +1,20 @@
+import yellowStar from '../assets/imgs/star-yellow.png'
+import star from '../assets/imgs/star.png'
+
 export function EmailPreview({ email }){
     const isStarred = email.isStarred
+    const isRead = email.isRead ? "true" : "false"
 
-    return <section>
-        <img src={`https://robohash.org/${star}`} alt="" />
-        <p>{email.subject}</p>
-        <p>{email.subject}</p>
-        <p>{email.subject}</p>
-        <p>{email.subject}</p>
-    </section>
+    return <li className="email-preview">
+            <section className="email-left">
+                <img className="star-img" src={isStarred ? yellowStar : star} alt=""/>
+                <p className="email-subject">{email.subject}</p>
+                <p className="email-body">{email.body}</p>
+            </section>
+            <p className="email-read">{isRead}</p>
+            <p className="email-date">{email.sentAt}</p>
+            {/* todo: implement hover buttons */}
+        </li>
 }
 
 // {
