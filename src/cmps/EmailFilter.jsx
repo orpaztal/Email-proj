@@ -18,12 +18,16 @@ export function EmailFilter({ filterBy, onFilterBy }) {
         setFilterByToEdit(prev => ({ ...prev, ["isRead"]: !isRead }))
     }
 
+    function onAllClick() {
+        setFilterByToEdit(prev => ({ ...prev, ["isRead"]: null }))
+    }
+
     function btnName() {
         return isRead ? "Unread" : "Read"
     }
    
     return <section className="email-filter">
-        <label htmlFor="txt">Search</label>
+        <label className="email-filter-label" htmlFor="txt">Search</label>
         <input 
             className="email-search"
             value={filterByToEdit.txt} 
@@ -32,6 +36,8 @@ export function EmailFilter({ filterBy, onFilterBy }) {
             name="txt" 
             type="text" />
 
+        <label className="email-read-label">Filer Read/Unread emails</label>
         <button className="email-read-button" onClick={onReadUnreadClick}>{btnName()}</button>
+        <button className="email-read-button" onClick={onAllClick}>{"All"}</button>
     </section>
 }

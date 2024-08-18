@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { EmailFolder } from "./EmailFolder"
 
 export function EmailFolderList({ filterBy, onFilterBy }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
@@ -24,9 +25,9 @@ export function EmailFolderList({ filterBy, onFilterBy }) {
     }
 
     return <section className="email-folder-list">
-        <h4 className="inbox-btn" onClick={onInboxPressed}>Inbox</h4>
-        <h4 className="sent-btn" onClick={onSentPressed}>Sent</h4>
-        <h4 className="stared-btn" onClick={onStarredPressed}>Starred</h4>
-        <h4 className="trash-btn" onClick={onTrashPressed}>Trash</h4>
+        <EmailFolder btnText={"Inbox"} onClick={onInboxPressed}/>
+        <EmailFolder btnText={"Sent"} onClick={onSentPressed}/>
+        <EmailFolder btnText={"Starred"} onClick={onStarredPressed}/>
+        <EmailFolder btnText={"Trash"} onClick={onTrashPressed}/>
     </section>
 }

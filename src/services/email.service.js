@@ -7,6 +7,7 @@ export const emailService = {
     remove,
     save,
     getDefaultFilter,
+    getCountOfUnreadEmails,
 }
 
 const STORAGE_KEY = 'email'
@@ -14,12 +15,6 @@ const STORAGE_KEY = 'email'
 // const loggedinUser = {
 //     email: 'user@appsus.com', 
 //     fullname: 'Mahatma Appsus'
-// }
-
-// const filterBy = {
-//     status: 'inbox/sent/star/trash',
-//     txt: 'puki', // no need to support complex text search
-//     isRead: true/false/null, // (optional property, if missing: show all)
 // }
 
 _createEmails()
@@ -39,7 +34,7 @@ async function query(filterBy) {
             inbox: email => email.to === 'user@appsus.com',
             sent: email => email.to !== 'user@appsus.com',
             star: email => email.isStarred === true,
-            trash: email => !!email.removedAt
+            trash: email => email.removedAt !== null
         };
     
         return status ? emails.filter(filters[status]) : emails;
@@ -49,6 +44,11 @@ async function query(filterBy) {
 
 function getById(id) {
     return storageService.get(STORAGE_KEY, id)
+}
+
+async function getCountOfUnreadEmails() {
+    let emails = await storageService.query(STORAGE_KEY)
+    return emails.filter(email => !!email.isRead).length
 }
 
 function remove(id) {

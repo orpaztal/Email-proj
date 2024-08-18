@@ -1,3 +1,20 @@
 .email-filter {
-    
+    margin-top: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+}
+
+.email-filter-label {
+    margin-right: 10px;
+}
+
+.email-read-button {
+    margin-left: 10px;
+}
+
+.email-read-label {
+    margin-left: 30px;
 }

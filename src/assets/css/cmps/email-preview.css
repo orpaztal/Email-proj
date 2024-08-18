@@ -2,6 +2,22 @@
     flex-direction: row;
     display: flex;    
     justify-content: space-between;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 4px;
+    width: 800px;
+}
+
+.email-preview.email-preview-unread {
+    font-weight: bold;
+    font-weight: 700;
+    background-color: white;
+} 
+
+.email-preview.email-preview-read {
+    font-weight: lighter;
+    background-color: lightgray;
 }
 
 .email-left {
@@ -18,4 +34,37 @@
 .email-date {
     display: flex;
     margin-left: 100px;
+}
+
+/* Hide the buttons by default */
+.hover-buttons {
+    display: none;
+}
+
+/* Show the buttons when hovering over the list item */
+li:hover .hover-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Style the individual buttons */
+.hover-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.hover-button:hover {
+    background-color: #45a049;
+}
+
+.email-details-link {
+    textDecoration: 'none';
+    color: 'inherit';
+    display: 'block';
+    flex: 1;
+    flex-direction: row;
 }
