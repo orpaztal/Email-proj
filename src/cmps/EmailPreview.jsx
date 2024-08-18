@@ -5,7 +5,7 @@ import { emailService } from '../services/email.service';
 import yellowStar from '../assets/imgs/star-yellow.png'
 import star from '../assets/imgs/star.png'
 
-export function EmailPreview({ email }){
+export function EmailPreview({ email, removeEmail }){
     const [ isStar, setIsStar ] = useState(email.isStarred)
     const [ isRead, setIsRead ] = useState(email.isRead)
     const [ removedAt, setRemovedAt ] = useState(email.removedAt)
@@ -50,7 +50,6 @@ export function EmailPreview({ email }){
         }
     }
 
-        if (removedAt) return null
         return <li className={className()} onClick={() => onChangeReadUnread(true)}>
                 <img className="star-img" 
                     onClick={(e) => {
@@ -66,6 +65,7 @@ export function EmailPreview({ email }){
                         <p className="email-body" style={{ fontWeight: isRead ? 'lighter' : 'bold' }}>{email.body}</p>
                     </section>
                     <p className="email-date">{formattedDate}</p>
+                    <button onClick={() => removeEmail(email.id)}>Remove perminnenty</button>
                 </Link>
 
                     <div className="hover-buttons">
@@ -85,14 +85,3 @@ export function EmailPreview({ email }){
                     </div>
             </li>
         }
-
-// {
-//     id: 'e105',
-//     subject: 'Sale starts in ZARA today!',
-//     body: 'Big discounts!', 
-//     isRead: true,
-//     isStarred: true,
-//     sentAt : 1551133930594,
-//     removedAt : null, //for later use from: 'momo@momo.com',
-//     to: 'user@appsus.com'
-// },

@@ -39,6 +39,7 @@
 /* Hide the buttons by default */
 .hover-buttons {
     display: none;
+    
 }
 
 /* Show the buttons when hovering over the list item */

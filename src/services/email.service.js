@@ -11,11 +11,7 @@ export const emailService = {
 }
 
 const STORAGE_KEY = 'email'
-
-// const loggedinUser = {
-//     email: 'user@appsus.com', 
-//     fullname: 'Mahatma Appsus'
-// }
+const LOGGED_IN_USER_EMAIL = 'user@appsus.com'
 
 _createEmails()
 
@@ -27,13 +23,13 @@ async function query(filterBy) {
 
         emails = emails.filter(email =>
             (isRead === null || email.isRead === isRead) &&
-            (email.body.toLowerCase().includes(txt.toLowerCase()) || email.subject.toLowerCase().includes(txt.toLowerCase()))
+            (email.body?.toLowerCase().includes(txt.toLowerCase()) || email.subject?.toLowerCase().includes(txt.toLowerCase()))
         )
 
         const filters = {
-            inbox: email => email.to === 'user@appsus.com',
-            sent: email => email.to !== 'user@appsus.com',
-            star: email => email.isStarred === true,
+            inbox: email => email.to === LOGGED_IN_USER_EMAIL && email.removedAt === null,
+            sent: email => email.to !== LOGGED_IN_USER_EMAIL && email.removedAt === null,
+            star: email => email.isStarred === true && email.removedAt === null,
             trash: email => email.removedAt !== null
         };
     
@@ -59,7 +55,7 @@ function save(emailToSave) {
     if (emailToSave.id) {
         return storageService.put(STORAGE_KEY, emailToSave)
     } else {
-        emailToSave.isOn = false
+        emailToSave.id = utilService.makeId()
         return storageService.post(STORAGE_KEY, emailToSave)
     }
 }
@@ -126,6 +122,56 @@ function _createEmails() {
             sentAt : 1551133930594,
             removedAt : null, //for later use from: 'momo@momo.com',
             to: 'user@appsus.com'
+        },
+        {
+            id: 'e106',
+            subject: 'New mail',
+            body: 'just for you', 
+            isRead: true,
+            isStarred: true,
+            sentAt : 1551133930594,
+            removedAt : 1551133930594, //for later use from: 'momo@momo.com',
+            to: 'ypp@aps.com'
+        },
+        {
+            id: 'e107',
+            subject: 'Yossi',
+            body: 'Scheduled meeting with you', 
+            isRead: true,
+            isStarred: false,
+            sentAt : 1551133930594,
+            removedAt : 1551133930594, //for later use from: 'momo@momo.com',
+            to: 'ypp@aps.com'
+        },
+        {
+            id: 'e108',
+            subject: 'Test result',
+            body: 'here are your test results', 
+            isRead: true,
+            isStarred: true,
+            sentAt : 1551133930594,
+            removedAt : 1551133930594, //for later use from: 'momo@momo.com',
+            to: 'ypp@aps.com'
+        },
+        {
+            id: 'e109',
+            subject: 'Top secret!!!!',
+            body: 'only for you', 
+            isRead: true,
+            isStarred: false,
+            sentAt : 1551133930594,
+            removedAt : null, //for later use from: 'momo@momo.com',
+            to: 'ypp@aps.com'
+        },
+        {
+            id: 'e110',
+            subject: 'SPAM SPAM SPAM',
+            body: 'this is spam spam spam', 
+            isRead: true,
+            isStarred: true,
+            sentAt : 1551133930594,
+            removedAt : null, //for later use from: 'momo@momo.com',
+            to: 'ypp@aps.com'
         },
     ]
     utilService.saveToStorage(STORAGE_KEY, emails)

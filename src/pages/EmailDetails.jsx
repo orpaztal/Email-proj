@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router"
 import { Link } from "react-router-dom"
+
 import { emailService } from '../services/email.service'
 
 export function EmailDetails() {
@@ -16,11 +17,10 @@ async function loadEmail() {
     setEmail(email) 
 }
 
-return <section className="robot-details">
-    <Link to="/email">Back</Link>
-
-    <h1>Details</h1>
-    <pre>{JSON.stringify(email, null, 2)}</pre>
-  </section>
+return <section className="email-details">
+          <Link to="/email">Back</Link>
+          <h1 className='email-details-title'>{email?.subject}</h1>
+          <h4 className='email-details-body'>{email?.body}</h4>
+      </section>
 }
 

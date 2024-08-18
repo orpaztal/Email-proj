@@ -20,7 +20,7 @@ export function EmailIndex() {
     async function loadEmails() {
         try {
             const emails = await emailService.query(filterBy)
-            setCount(pre=> emails?.filter(email => !email.isRead).length);
+            setCount(pre => emails?.filter(email => !email.isRead).length);
             setEmails(emails)
         } catch (err) {
             console.log(err)            
@@ -32,15 +32,47 @@ export function EmailIndex() {
         setFilterBy(filterBy)
     }
 
+    async function removeEmail(emailId) {
+        try {
+            await emailService.remove(emailId)
+            setEmails(emails => emails.filter(email => email.id !== emailId))
+        } catch (err) {
+            console.log(err)            
+            alert('Couldnt remove email')
+        }
+    }
+
+    async function onSendMail(to, subject, body) {
+        const newEmail = {
+            to: to || 'ypp@aps.com',
+            subject: subject || "Default sub",
+            body: body || "body body body", 
+            isRead: false,
+            isStarred: false,
+            sentAt: new Date(),
+            removedAt: null,
+        };
+        
+        try {
+            await emailService.save(newEmail)
+            setEmails((emails) => [...emails, newEmail]);
+        } catch (err) {
+            console.log(err)            
+            alert('Couldnt send email')
+        }
+    }
+
+    
+    
     if (!emails) return <div> Loading... </div>
     
     return (
         <div className="email-index">
-            <EmailFilter filterBy={filterBy} onFilterBy={onFilterBy}/>
+            <EmailFilter filterBy={filterBy} onFilterBy={onFilterBy} onSendMail={onSendMail}/>
             <h4>{`Unread Count: ${count}`}</h4>
             <section className="email-list-and-folders">
                 <EmailFolderList filterBy={filterBy} onFilterBy={onFilterBy}/>
-                <EmailList emails={emails}/>
+                <EmailList emails={emails} removeEmail={removeEmail}/>
             </section>
         </div>
     )

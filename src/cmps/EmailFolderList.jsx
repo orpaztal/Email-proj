@@ -8,26 +8,14 @@ export function EmailFolderList({ filterBy, onFilterBy }) {
         onFilterBy(filterByToEdit)
     }, [filterByToEdit])
 
-    function onInboxPressed(){
-        setFilterByToEdit(prev => ({ ...prev, ["status"]: "inbox" }))
-    }
-
-    function onSentPressed(){
-        setFilterByToEdit(prev => ({ ...prev, ["status"]: "sent" }))
-    }
-
-    function onStarredPressed(){
-        setFilterByToEdit(prev => ({ ...prev, ["status"]: "star" }))
-    }
-
-    function onTrashPressed(){
-        setFilterByToEdit(prev => ({ ...prev, ["status"]: "trash" }))
+    function onFolderPress(folderName){
+        setFilterByToEdit(prev => ({ ...prev, ["status"]: folderName }))
     }
 
     return <section className="email-folder-list">
-        <EmailFolder btnText={"Inbox"} onClick={onInboxPressed}/>
-        <EmailFolder btnText={"Sent"} onClick={onSentPressed}/>
-        <EmailFolder btnText={"Starred"} onClick={onStarredPressed}/>
-        <EmailFolder btnText={"Trash"} onClick={onTrashPressed}/>
+        <EmailFolder btnText={"Inbox"} onClick={() => onFolderPress("inbox")}/>
+        <EmailFolder btnText={"Sent"} onClick={() => onFolderPress("sent")}/>
+        <EmailFolder btnText={"Starred"} onClick={() => onFolderPress("star")}/>
+        <EmailFolder btnText={"Trash"} onClick={() => onFolderPress("trash")}/>
     </section>
 }

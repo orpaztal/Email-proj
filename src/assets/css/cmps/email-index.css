@@ -4,3 +4,13 @@
     align-items: center;
     background-color: lightgray;
 }
+
+.email-details-title {
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.email-details-body {
+    margin-top: 40px;
+    margin-left: 20px;
+}

@@ -1,7 +1,6 @@
 .email-folder-list {
     display: flex;
     flex-direction: column;
-    align-items: center;
     background-color: lightgray;
 }
 
@@ -11,7 +10,6 @@
     padding-top: 8px;
     margin-top: 5px;
     width: 80px;
-    align-items: center;
     text-align: center;
     margin-left: 20px;
     background-color: lightgray;
