@@ -4,7 +4,7 @@ import { EmailComposer } from "./EmailComposer"
 export function EmailFilter({ filterBy, onFilterBy, onSendMail }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
     const [ isRead, setIsRead ] = useState(filterBy.isRead)
-    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [ isModalOpen, setIsModalOpen ] = useState(false); 
 
     useEffect(() => {
         onFilterBy(filterByToEdit)

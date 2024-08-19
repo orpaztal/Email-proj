@@ -16,7 +16,6 @@ export function EmailIndex() {
         loadEmails()
     }, [filterBy])
 
-
     async function loadEmails() {
         try {
             const emails = await emailService.query(filterBy)
@@ -30,16 +29,6 @@ export function EmailIndex() {
 
     function onFilterBy(filterBy) {
         setFilterBy(filterBy)
-    }
-
-    async function removeEmail(emailId) {
-        try {
-            await emailService.remove(emailId)
-            setEmails(emails => emails.filter(email => email.id !== emailId))
-        } catch (err) {
-            console.log(err)            
-            alert('Couldnt remove email')
-        }
     }
 
     async function onSendMail(to, subject, body) {
@@ -62,8 +51,18 @@ export function EmailIndex() {
         }
     }
 
-    
-    
+    async function onRemove(email){
+        const removeDate = new Date().toDateString()
+        const changedEmail = { ...email, removedAt: removeDate}
+        try {
+            await emailService.save(changedEmail)
+            setEmails(prev=> prev.map((email)=> email.id === changedEmail.id ? changedEmail : email))
+            loadEmails() //todo: this is not correct. temp fix
+        } catch (err) {
+            console.log("failed to remove mail ", err);
+        }
+    }
+
     if (!emails) return <div> Loading... </div>
     
     return (
@@ -72,7 +71,7 @@ export function EmailIndex() {
             <h4>{`Unread Count: ${count}`}</h4>
             <section className="email-list-and-folders">
                 <EmailFolderList filterBy={filterBy} onFilterBy={onFilterBy}/>
-                <EmailList emails={emails} removeEmail={removeEmail}/>
+                <EmailList emails={emails} onRemove={onRemove}/>
             </section>
         </div>
     )

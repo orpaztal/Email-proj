@@ -5,10 +5,9 @@ import { emailService } from '../services/email.service';
 import yellowStar from '../assets/imgs/star-yellow.png'
 import star from '../assets/imgs/star.png'
 
-export function EmailPreview({ email, removeEmail }){
+export function EmailPreview({ email, removeEmail, onRemove }){
     const [ isStar, setIsStar ] = useState(email.isStarred)
     const [ isRead, setIsRead ] = useState(email.isRead)
-    const [ removedAt, setRemovedAt ] = useState(email.removedAt)
 
     const date = new Date(email.sentAt);
     const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
@@ -38,18 +37,6 @@ export function EmailPreview({ email, removeEmail }){
         }
     }
 
-    async function onRemove(){
-        const removeDate = new Date().toDateString()
-        console.log(removeDate)
-        const changedEmail = { ...email, removedAt: removeDate}
-        try {
-            await emailService.save(changedEmail)
-            setRemovedAt(removeDate)
-        } catch (err) {
-            console.log("failed to remove mail ", err);
-        }
-    }
-
         return <li className={className()} onClick={() => onChangeReadUnread(true)}>
                 <img className="star-img" 
                     onClick={(e) => {
@@ -65,7 +52,6 @@ export function EmailPreview({ email, removeEmail }){
                         <p className="email-body" style={{ fontWeight: isRead ? 'lighter' : 'bold' }}>{email.body}</p>
                     </section>
                     <p className="email-date">{formattedDate}</p>
-                    <button onClick={() => removeEmail(email.id)}>Remove perminnenty</button>
                 </Link>
 
                     <div className="hover-buttons">
@@ -79,7 +65,7 @@ export function EmailPreview({ email, removeEmail }){
                         <button className="hover-button"
                             onClick={(e) => {
                                 e.stopPropagation(); 
-                                onRemove();
+                                onRemove(email);
                             }}
                         > Remove </button>
                     </div>
