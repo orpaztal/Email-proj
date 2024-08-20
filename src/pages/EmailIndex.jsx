@@ -56,8 +56,7 @@ export function EmailIndex() {
         const changedEmail = { ...email, removedAt: removeDate}
         try {
             await emailService.save(changedEmail)
-            setEmails(prev=> prev.map((email)=> email.id === changedEmail.id ? changedEmail : email))
-            loadEmails() //todo: this is not correct. temp fix
+            setEmails(emails=> emails.filter(email=> email.id !== changedEmail.id))
         } catch (err) {
             console.log("failed to remove mail ", err);
         }
