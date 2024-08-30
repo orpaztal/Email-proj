@@ -68,14 +68,14 @@ export function EmailIndex() {
     }
 
     if (!emails) return <div> Loading... </div>
-    const { status, txt, isRead } = filterBy
+    const { folder, txt, isRead } = filterBy
 
     return (
         <div className="email-index">
             <EmailFilter filterBy={{ txt, isRead }} onFilterBy={onSetFilterByDebounce} onSendMail={onSendMail}/>
             <h4>{`Unread Count: ${count}`}</h4>
             <section className="email-list-and-folders">
-                <EmailFolderList filterBy={{ status }} onFilterBy={onSetFilterByDebounce}/>
+                <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce}/>
                 <EmailList emails={emails} onRemove={onRemove}/>
             </section>
         </div>

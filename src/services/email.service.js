@@ -20,7 +20,7 @@ async function query(filterBy) {
     let emails = await storageService.query(STORAGE_KEY)
 
     if (filterBy) {
-        let { status = "inbox", txt = "", isRead = null } = filterBy
+        let { folder = "inbox", txt = "", isRead = null } = filterBy
 
         emails = emails.filter(email =>
             (isRead === null || email.isRead === isRead) &&
@@ -34,7 +34,7 @@ async function query(filterBy) {
             trash: email => email.removedAt !== null
         };
     
-        return status ? emails.filter(filters[status]) : emails;
+        return folder ? emails.filter(filters[folder]) : emails;
     }
     return emails
 }
@@ -63,7 +63,7 @@ function save(emailToSave) {
 
 function getDefaultFilter() {
     return {
-        status: "inbox", 
+        folder: "inbox", 
         txt: "", 
         isRead: null,
     }

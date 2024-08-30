@@ -9,7 +9,7 @@ export function EmailFolderList({ filterBy, onFilterBy }) {
     }, [filterByToEdit])
 
     function onFolderPress(folderName){
-        setFilterByToEdit(prev => ({ ...prev, ["status"]: folderName }))
+        setFilterByToEdit(prev => ({ ...prev, ["folder"]: folderName }))
     }
 
     return <section className="email-folder-list">
