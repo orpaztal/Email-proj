@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import { emailService } from "../services/email.service.js"
 import { utilService } from "../services/util.service.js"
+import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service"
 
 import { EmailList } from "../cmps/EmailList.jsx"
 import { EmailFilter } from "../cmps/EmailFilter.jsx"
@@ -28,7 +29,7 @@ export function EmailIndex() {
             setEmails(emails)
         } catch (err) {
             console.log(err)            
-            alert('Couldnt load emails')
+            showErrorMsg('Couldnt load emails')
         }
     }
 
@@ -50,9 +51,10 @@ export function EmailIndex() {
         try {
             await emailService.save(newEmail)
             setEmails((emails) => [...emails, newEmail]);
+            showSuccessMsg(`Email (${newEmail.id}) was sent successfully!`)
         } catch (err) {
             console.log(err)            
-            alert('Couldnt send email')
+            showErrorMsg('Couldnt send email')
         }
     }
 
@@ -62,8 +64,9 @@ export function EmailIndex() {
         try {
             await emailService.save(changedEmail)
             setEmails(emails=> emails.filter(email=> email.id !== changedEmail.id))
+            showSuccessMsg(`Email (${email.id}) was removed successfully!`)
         } catch (err) {
-            console.log("failed to remove mail ", err);
+            showErrorMsg.log("failed to remove mail ", err);
         }
     }
 
@@ -72,10 +75,10 @@ export function EmailIndex() {
 
     return (
         <div className="email-index">
-            <EmailFilter filterBy={{ txt, isRead }} onFilterBy={onSetFilterByDebounce} onSendMail={onSendMail}/>
+            <EmailFilter filterBy={{ txt, isRead }} onFilterBy={onSetFilterByDebounce}/>
             <h4>{`Unread Count: ${count}`}</h4>
             <section className="email-list-and-folders">
-                <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce}/>
+                <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} onSendMail={onSendMail}/>
                 <EmailList emails={emails} onRemove={onRemove}/>
             </section>
         </div>
