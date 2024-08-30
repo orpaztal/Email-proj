@@ -4,16 +4,18 @@ import { emailService } from "../services/email.service.js"
 import { EmailList } from "../cmps/EmailList.jsx"
 import { EmailFilter } from "../cmps/EmailFilter.jsx"
 import { EmailFolderList } from "../cmps/EmailFolderList.jsx"
+import { useSearchParams } from "react-router-dom"
 
 export function EmailIndex() {
-    const defaultFilter = emailService.getDefaultFilter()
+    const [ searchParams, setSearchParams ] = useSearchParams()
 
     const [ emails, setEmails ] = useState(null)
-    const [ filterBy, setFilterBy ] = useState(defaultFilter)
+    const [ filterBy, setFilterBy ] = useState(emailService.getFilterFromSearchParams(searchParams))
     const [ count, setCount ] = useState(0)
 
     useEffect(() => {
         loadEmails()
+        setSearchParams(filterBy)
     }, [filterBy])
 
     async function loadEmails() {
@@ -28,7 +30,7 @@ export function EmailIndex() {
     }
 
     function onFilterBy(filterBy) {
-        setFilterBy(filterBy)
+        setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
     }
 
     async function onSendMail(to, subject, body) {
@@ -63,13 +65,14 @@ export function EmailIndex() {
     }
 
     if (!emails) return <div> Loading... </div>
-    
+    const { status, txt, isRead } = filterBy
+
     return (
         <div className="email-index">
-            <EmailFilter filterBy={filterBy} onFilterBy={onFilterBy} onSendMail={onSendMail}/>
+            <EmailFilter filterBy={{ txt, isRead }} onFilterBy={onFilterBy} onSendMail={onSendMail}/>
             <h4>{`Unread Count: ${count}`}</h4>
             <section className="email-list-and-folders">
-                <EmailFolderList filterBy={filterBy} onFilterBy={onFilterBy}/>
+                <EmailFolderList filterBy={{ status }} onFilterBy={onFilterBy}/>
                 <EmailList emails={emails} onRemove={onRemove}/>
             </section>
         </div>

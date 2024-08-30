@@ -8,6 +8,7 @@ export const emailService = {
     save,
     getDefaultFilter,
     getCountOfUnreadEmails,
+    getFilterFromSearchParams,
 }
 
 const STORAGE_KEY = 'email'
@@ -62,10 +63,38 @@ function save(emailToSave) {
 
 function getDefaultFilter() {
     return {
-        status: "", 
+        status: "inbox", 
         txt: "", 
         isRead: null,
     }
+}
+
+function getFilterFromSearchParams(searchParams) {
+    // const defaultFilter = getDefaultFilter()
+    // const filterBy = {}
+
+    // for (const field in defaultFilter) {
+    //     filterBy[field] = searchParams.get(field) || (field === "isRead" ? null : "")
+    //     if (filterBy[field] === "null") {
+    //         filterBy[field] = null
+    //     }
+    // }
+
+    // return filterBy
+
+    const filterBy = {};
+
+    for (const [field] of Object.entries(getDefaultFilter())) {
+        let value = searchParams.get(field);
+
+        if (value === "null") value = null;
+        else if (value === "true") value = true;
+        else if (value === "false") value = false;
+
+        filterBy[field] = value !== null ? value : (field === "isRead" ? null : "");
+    }
+
+    return filterBy;
 }
 
 function _createEmails() {
