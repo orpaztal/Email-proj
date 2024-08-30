@@ -3,6 +3,29 @@ export const utilService = {
     makeId,
     saveToStorage,
     loadFromStorage,
+    getExistingProperties,
+    debounce,
+}
+
+function getExistingProperties(obj) {
+    const truthyObj = {}
+    for (const key in obj) {
+        const val = obj[key]
+        if (val || typeof val === 'boolean') {
+            truthyObj[key] = val
+        }
+    }
+    return truthyObj
+}
+
+function debounce(func, time) {
+    let timeoutId
+    return (...args) => {
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+            func(...args)
+        }, time)
+    }
 }
 
 function makeId(length = 5) {

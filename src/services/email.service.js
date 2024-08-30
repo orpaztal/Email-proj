@@ -20,7 +20,7 @@ async function query(filterBy) {
     let emails = await storageService.query(STORAGE_KEY)
 
     if (filterBy) {
-        let { status = "", txt = "", isRead = null } = filterBy
+        let { status = "inbox", txt = "", isRead = null } = filterBy
 
         emails = emails.filter(email =>
             (isRead === null || email.isRead === isRead) &&
