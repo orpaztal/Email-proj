@@ -85,7 +85,7 @@ export function EmailIndex() {
         }
     }
 
-    if (!emails) return <div> Loading... </div>
+    if (!emails) return <div> No emails to show... </div>
 
     return (
         <div className="email-index">

@@ -109,7 +109,7 @@ function createEmail() {
     return {
         subject: "",
         body: "", 
-        isRead: false,
+        isRead: true,
         isStarred: false,
         sentAt : null,
         removedAt : null, 
@@ -223,6 +223,6 @@ function _createEmails() {
             to: 'ypp@aps.com'
         },
     ]
-    
+
     utilService.saveToStorage(STORAGE_KEY, emails)
 }

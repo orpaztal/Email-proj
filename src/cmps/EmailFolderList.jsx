@@ -18,10 +18,10 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
     return <section className="email-folder-list">
         <Link className={"compose-btn"} to={"/mail/compose"}>Compose</Link>
 
-        <EmailFolder btnText={"Inbox"} onClick={() => onFolderPress("inbox")} count={unreadCount}/>
-        <EmailFolder btnText={"Sent"} onClick={() => onFolderPress("sent")}/>
-        <EmailFolder btnText={"Starred"} onClick={() => onFolderPress("star")}/>
-        <EmailFolder btnText={"Trash"} onClick={() => onFolderPress("trash")}/>
-        <EmailFolder btnText={"Drafts"} onClick={() => onFolderPress("drafts")}/>
+        <EmailFolder folder={"Inbox"} onClick={() => onFolderPress("inbox")} count={unreadCount}/>
+        <EmailFolder folder={"Sent"} onClick={() => onFolderPress("sent")}/>
+        <EmailFolder folder={"Starred"} onClick={() => onFolderPress("star")}/>
+        <EmailFolder folder={"Trash"} onClick={() => onFolderPress("trash")}/>
+        <EmailFolder folder={"Drafts"} onClick={() => onFolderPress("drafts")}/>
     </section>
 }
