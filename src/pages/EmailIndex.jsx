@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef } from "react"
+import { Outlet, useSearchParams, useNavigate } from "react-router-dom"
+
 import { emailService } from "../services/email.service.js"
 import { utilService } from "../services/util.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service"
@@ -6,26 +8,31 @@ import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service"
 import { EmailList } from "../cmps/EmailList.jsx"
 import { EmailFilter } from "../cmps/EmailFilter.jsx"
 import { EmailFolderList } from "../cmps/EmailFolderList.jsx"
-import { useSearchParams } from "react-router-dom"
 
+/* eslint-disable react/prop-types */
 export function EmailIndex() {
+    const navigate = useNavigate()
     const [ searchParams, setSearchParams ] = useSearchParams()
 
     const [ emails, setEmails ] = useState(null)
-    const [ filterBy, setFilterBy ] = useState(emailService.getFilterFromSearchParams(searchParams))
     const [ count, setCount ] = useState(0)
+    const [ filterBy, setFilterBy ] = useState(emailService.getFilterFromSearchParams(searchParams))
 
     const onSetFilterByDebounce = useRef(utilService.debounce(onFilterBy, 400)).current
+    const { folder, txt, isRead } = filterBy
 
     useEffect(() => {
         loadEmails()
         setSearchParams(utilService.getExistingProperties(filterBy))
     }, [filterBy])
 
+    useEffect(() => {
+        filterBy.folder === "inbox" && setCount(emails?.filter(email => !email.isRead).length);
+    }, [emails])
+
     async function loadEmails() {
         try {
             const emails = await emailService.query(filterBy)
-            setCount(pre => emails?.filter(email => !email.isRead).length);
             setEmails(emails)
         } catch (err) {
             console.log(err)            
@@ -37,21 +44,26 @@ export function EmailIndex() {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
     }
 
-    async function onSendMail(to, subject, body) {
-        const newEmail = {
-            to: to || 'ypp@aps.com',
-            subject: subject || "Default sub",
-            body: body || "body body body", 
-            isRead: false,
-            isStarred: false,
-            sentAt: new Date(),
-            removedAt: null,
-        };
-        
+    async function onUpdateEmail(email) {
         try {
-            await emailService.save(newEmail)
-            setEmails((emails) => [...emails, newEmail]);
+            const updatedEmail = await emailService.save(email)
+            setEmails(prevEmails=> prevEmails.map(curr=> curr.id === updatedEmail.id ? updatedEmail : curr))
+        } catch (err) {
+            console.log("failed to update", err);
+        }
+    }
+
+    async function onSendMail(emailToSave) {        
+        try {
+            const newEmail = await emailService.save(emailToSave)
+            if (emailToSave.id) {
+                setEmails(emails => [...emails, newEmail]);
+            } else {
+                setEmails(emails => emails.map(email => email.id === newEmail.id ? newEmail : email))
+            }
+            console.log("newEmail: ", newEmail)
             showSuccessMsg(`Email (${newEmail.id}) was sent successfully!`)
+            navigate('/mail')
         } catch (err) {
             console.log(err)            
             showErrorMsg('Couldnt send email')
@@ -61,26 +73,28 @@ export function EmailIndex() {
     async function onRemove(email){
         const removeDate = new Date().toDateString()
         const changedEmail = { ...email, removedAt: removeDate}
+
         try {
-            await emailService.save(changedEmail)
+            (email.removedAt && filterBy.folder === "trash") 
+            ? await emailService.remove(email.id) 
+            : await emailService.save(changedEmail)
             setEmails(emails=> emails.filter(email=> email.id !== changedEmail.id))
             showSuccessMsg(`Email (${email.id}) was removed successfully!`)
         } catch (err) {
-            showErrorMsg.log("failed to remove mail ", err);
+            showErrorMsg("failed to remove mail ", err);
         }
     }
 
     if (!emails) return <div> Loading... </div>
-    const { folder, txt, isRead } = filterBy
 
     return (
         <div className="email-index">
             <EmailFilter filterBy={{ txt, isRead }} onFilterBy={onSetFilterByDebounce}/>
-            <h4>{`Unread Count: ${count}`}</h4>
             <section className="email-list-and-folders">
-                <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} onSendMail={onSendMail}/>
-                <EmailList emails={emails} onRemove={onRemove}/>
+                <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} unreadCount={count}/>
+                <EmailList emails={emails} onRemove={onRemove} onUpdateEmail={onUpdateEmail}/>
             </section>
+            <Outlet context={{ onSendMail }}/>
         </div>
     )
 }

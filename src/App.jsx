@@ -6,7 +6,7 @@ import { AboutUs } from "./pages/AboutUs";
 import { EmailIndex } from "./pages/EmailIndex";
 import { EmailDetails } from "./pages/EmailDetails";
 import { UserMsg } from './cmps/UserMsg'
-
+import { EmailComposer } from "./cmps/EmailComposer";
 import { AppHeader } from "./cmps/AppHeader"
 
 export function App() {
@@ -18,8 +18,10 @@ export function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/aboutus" element={<AboutUs/>}/>
-                <Route path="/email" element={<EmailIndex/>}/>
-                <Route path="/email/:id" element={<EmailDetails/>}/>
+                <Route path="/mail" element={<EmailIndex/>}>
+                    <Route path="/mail/compose/:id?" element={<EmailComposer/>}/>
+                </Route>
+                <Route path="/mail/:id" element={<EmailDetails/>}/>
             </Routes>
         </main>
 

@@ -1,27 +1,43 @@
 import { useState } from "react"
+import { Link, useOutletContext } from "react-router-dom";
+import { emailService } from "../services/email.service"
 
-export function EmailComposer({ onSendMail }){
+export function EmailComposer(){
 
-    const [ to, setTo ] = useState("")
-    const [ subject, setSubject ] = useState("")
-    const [ body, setBody ] = useState("")
+    const [ email, setEmail ] = useState(emailService.createEmail())
+    const { onSendMail } = useOutletContext()
 
-    function handleChange({ target: { name, value } }) {
-        const stateUpdaters = {
-            to: setTo,
-            subject: setSubject,
-            body: setBody,
-        };
-        stateUpdaters[name](value);
+    const { to, subject, body } = email
+
+    function handleChange({ target }) {
+        let { name: field, value, type } = target
+        switch (type) {
+            case 'number':
+            case 'range':
+                value = +value
+                break;
+            case 'checkbox':
+                value = target.checked
+                break
+            default:
+                break;
+        }
+        setEmail((prev) => ({ ...prev, [field]: value }))
     }
 
-    function handleSubmit(e) {
-        e.preventDefault(); 
-        onSendMail(to, subject, body);
+    function handleSubmit(ev) {
+        ev.preventDefault()
+        const updatedEmail = { ...email, sentAt: new Date() };
+    
+        setEmail(updatedEmail);
+        onSendMail(updatedEmail);
+        console.log("create email: ", updatedEmail)
     }
 
     return (
-        <div>
+        <div className="composer">
+            <Link to="/mail">Back</Link>
+
             <form onSubmit={handleSubmit}>
                 <label className="email-composer-to" htmlFor="to">To:</label>
                 <input

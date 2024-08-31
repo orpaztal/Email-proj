@@ -6,7 +6,7 @@ export function AppHeader() {
         <nav className="header-buttons">
             <NavLink to="/">Home</NavLink>
             <NavLink to="/aboutus">About</NavLink>
-            <NavLink to="/email">Emails</NavLink>
+            <NavLink to="/mail">Emails</NavLink>
         </nav>
     </header>
 }

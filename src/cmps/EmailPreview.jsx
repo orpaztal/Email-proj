@@ -1,55 +1,42 @@
-import { useState } from "react"
 import { Link } from "react-router-dom";
-import { emailService } from '../services/email.service';
 
 import yellowStar from '../assets/imgs/star-yellow.png'
 import star from '../assets/imgs/star.png'
 
-export function EmailPreview({ email, removeEmail, onRemove }){
-    const [ isStar, setIsStar ] = useState(email.isStarred)
-    const [ isRead, setIsRead ] = useState(email.isRead)
+/* eslint-disable react/prop-types */
+    export function EmailPreview({ email, onRemove, onUpdateEmail }){
 
     const date = new Date(email.sentAt);
     const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
     function className() {
-        return `email-preview ${isRead ? "email-preview-read" : "email-preview-unread"}`;
+        return `email-preview ${email.isRead ? "email-preview-read" : "email-preview-unread"}`;
     }
 
-    async function onStarPress() {
-        const changedEmail = { ...email, isStarred: !isStar }
-        try {
-            console.log("changedEmail", changedEmail)
-            await emailService.save(changedEmail)
-            setIsStar(prev=> !prev)
-        } catch (err) {
-            console.log("failed to change is starred ", err);
-        }
+    function onUpdateEmailStatus(e, { isStarred = null, isRead = null }) {
+        e.stopPropagation();
+    
+        const changedEmail = { 
+            ...email, 
+            ...(isStarred !== null && { isStarred: isStarred }), 
+            ...(isRead !== null && { isRead })
+        };
+    
+        onUpdateEmail(changedEmail);
     }
 
-    async function onChangeReadUnread(isReadStatus = null) {
-        const changedEmail = { ...email, isRead: isReadStatus }
-        try {
-            await emailService.save(changedEmail)
-            setIsRead(isReadStatus)
-        } catch (err) {
-            console.log("failed to change read unread mail ", err);
-        }
-    }
-
-        return <li className={className()} onClick={() => onChangeReadUnread(true)}>
+        return <li className={className()} onClick={(e) => onUpdateEmailStatus(e, { isRead: true })}>
                 <img className="star-img" 
                     onClick={(e) => {
-                        e.stopPropagation(); 
-                        onStarPress();
+                        onUpdateEmailStatus(e, { isStarred: !email.isStarred });
                     }}
-                    src={isStar ? yellowStar : star} 
+                    src={email.isStarred ? yellowStar : star} 
                     alt=""
                 />
-                <Link className={"email-details-link"} to={`/email/${email.id}`}>
+                <Link className={"email-details-link"} to={`/mail/${email.id}`}>
                     <section className="email-left">
-                        <p className="email-subject" style={{ fontWeight: isRead ? 'lighter' : 'bold' }}>{email.subject}</p>
-                        <p className="email-body" style={{ fontWeight: isRead ? 'lighter' : 'bold' }}>{email.body}</p>
+                        <p className="email-subject" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.subject}</p>
+                        <p className="email-body" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.body}</p>
                     </section>
                     <p className="email-date">{formattedDate}</p>
                 </Link>
@@ -57,10 +44,9 @@ export function EmailPreview({ email, removeEmail, onRemove }){
                     <div className="hover-buttons">
                         <button className="hover-button"
                             onClick={(e) => {
-                                e.stopPropagation(); 
-                                onChangeReadUnread(!isRead);
+                                onUpdateEmailStatus(e, { isRead: !email.isRead });
                             }}
-                        > Mark {isRead ? 'unread' : 'read'} </button>
+                        > Mark {email.isRead ? 'unread' : 'read'} </button>
                         
                         <button className="hover-button"
                             onClick={(e) => {

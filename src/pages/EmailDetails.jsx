@@ -18,7 +18,7 @@ async function loadEmail() {
 }
 
 return <section className="email-details">
-          <Link to="/email">Back</Link>
+          <Link to="/mail">Back</Link>
           <h1 className='email-details-title'>{email?.subject}</h1>
           <h4 className='email-details-body'>{email?.body}</h4>
       </section>

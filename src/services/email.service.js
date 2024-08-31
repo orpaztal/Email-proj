@@ -9,6 +9,8 @@ export const emailService = {
     getDefaultFilter,
     getCountOfUnreadEmails,
     getFilterFromSearchParams,
+    getUnreadCount,
+    createEmail,
 }
 
 const STORAGE_KEY = 'email'
@@ -31,12 +33,18 @@ async function query(filterBy) {
             inbox: email => email.to === LOGGED_IN_USER_EMAIL && email.removedAt === null,
             sent: email => email.to !== LOGGED_IN_USER_EMAIL && email.removedAt === null,
             star: email => email.isStarred === true && email.removedAt === null,
-            trash: email => email.removedAt !== null
+            trash: email => email.removedAt !== null,
+            drafts: email => email.sentAt === null,
         };
     
         return folder ? emails.filter(filters[folder]) : emails;
     }
     return emails
+}
+
+async function getUnreadCount() {
+    let emails = await storageService.query(STORAGE_KEY)
+    return emails.filter(email => email.to === LOGGED_IN_USER_EMAIL && email.removedAt === null && !email.isRead).length
 }
 
 function getById(id) {
@@ -95,6 +103,18 @@ function getFilterFromSearchParams(searchParams) {
     }
 
     return filterBy;
+}
+
+function createEmail() {
+    return {
+        subject: "",
+        body: "", 
+        isRead: false,
+        isStarred: false,
+        sentAt : null,
+        removedAt : null, 
+        to: "",
+    }
 }
 
 function _createEmails() {
@@ -203,5 +223,6 @@ function _createEmails() {
             to: 'ypp@aps.com'
         },
     ]
+    
     utilService.saveToStorage(STORAGE_KEY, emails)
 }

@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
+
 import { useEffect, useState } from "react"
-// import { EmailComposer } from "./EmailComposer"
 
 export function EmailFilter({ filterBy, onFilterBy }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
     const [ isRead, setIsRead ] = useState(filterBy.isRead)
-    // const [ isModalOpen, setIsModalOpen ] = useState(false); 
 
     useEffect(() => {
         onFilterBy(filterByToEdit)
@@ -28,19 +28,6 @@ export function EmailFilter({ filterBy, onFilterBy }) {
         return isRead ? "Unread" : "Read"
     }
 
-    // function onComposePress() {
-    //     setIsModalOpen(true); 
-    // }
-
-    // function closeModal() {
-    //     setIsModalOpen(false); 
-    // }
-
-    // function handleSendMail(to, subject, body) {
-    //     onSendMail(to, subject, body);
-    //     closeModal(); 
-    // }
-
     return <section className="email-filter">
         <section>
             <label className="email-filter-label" htmlFor="txt">Search</label>
@@ -59,15 +46,5 @@ export function EmailFilter({ filterBy, onFilterBy }) {
             <button className="email-read-button" onClick={onAllClick}>All</button>
         </section>
 
-        {/* <button className="compose-btn" onClick={onComposePress}>Compose</button> */}
-
-        {/* {isModalOpen && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <button className="close-modal" onClick={closeModal}>X</button>
-                        <EmailComposer onSendMail={handleSendMail} />
-                    </div>
-                </div>
-            )} */}
     </section>
 }

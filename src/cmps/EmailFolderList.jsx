@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { EmailFolder } from "./EmailFolder"
-import { EmailComposer } from "./EmailComposer"
+import { Link } from "react-router-dom";
 
-export function EmailFolderList({ filterBy, onFilterBy, onSendMail }) {
+import { EmailFolder } from "./EmailFolder"
+
+/* eslint-disable react/prop-types */
+export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
-    const [ isModalOpen, setIsModalOpen ] = useState(false); 
 
     useEffect(() => {
         onFilterBy(filterByToEdit)
@@ -14,23 +15,10 @@ export function EmailFolderList({ filterBy, onFilterBy, onSendMail }) {
         setFilterByToEdit(prev => ({ ...prev, ["folder"]: folderName }))
     }
 
-    function onComposePress() {
-        setIsModalOpen(true); 
-    }
-
-    function closeModal() {
-        setIsModalOpen(false); 
-    }
-
-    function handleSendMail(to, subject, body) {
-        onSendMail(to, subject, body);
-        closeModal(); 
-    }
-
     return <section className="email-folder-list">
-        <button className="compose-btn" onClick={onComposePress}>Compose</button>
+        <Link className={"compose-btn"} to={"/mail/compose"}>Compose</Link>
 
-        <EmailFolder btnText={"Inbox"} onClick={() => onFolderPress("inbox")}/>
+        <EmailFolder btnText={"Inbox"} onClick={() => onFolderPress("inbox")} count={unreadCount}/>
         <EmailFolder btnText={"Sent"} onClick={() => onFolderPress("sent")}/>
         <EmailFolder btnText={"Starred"} onClick={() => onFolderPress("star")}/>
         <EmailFolder btnText={"Trash"} onClick={() => onFolderPress("trash")}/>
