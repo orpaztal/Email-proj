@@ -25,6 +25,11 @@ import star from '../assets/imgs/star.png'
         onUpdateEmail(changedEmail);
     }
 
+    function getLinkRoute() {
+        return email.sentAt ? `/mail/${email.id}` : `/mail`
+        // <Link className={"email-details-link"} to={`/mail/${email.id}`}>
+    }
+
         return <li className={className()} onClick={(e) => onUpdateEmailStatus(e, { isRead: true })}>
                 <img className="star-img" 
                     onClick={(e) => {
@@ -56,4 +61,4 @@ import star from '../assets/imgs/star.png'
                         > Remove </button>
                     </div>
             </li>
-        }
+    }
