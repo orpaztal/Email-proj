@@ -29,6 +29,7 @@ function debounce(func, time) {
 }
 
 function makeId(length = 5) {
+    console.log("makeID called")
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < length; i++) {

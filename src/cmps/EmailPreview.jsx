@@ -15,20 +15,19 @@ import star from '../assets/imgs/star.png'
 
     function onUpdateEmailStatus(e, { isStarred = null, isRead = null }) {
         e.stopPropagation();
-    
         const changedEmail = { 
             ...email, 
             ...(isStarred !== null && { isStarred: isStarred }), 
             ...(isRead !== null && { isRead })
         };
-    
+        console.log("EmailPreview onUpdateEmail: ", email)
         onUpdateEmail(changedEmail);
     }
 
-    function getLinkRoute() {
-        return email.sentAt ? `/mail/${email.id}` : `/mail`
-        // <Link className={"email-details-link"} to={`/mail/${email.id}`}>
-    }
+    // function getLinkRoute() {
+    //     return email.sentAt ? `/mail/${email.id}` : `/mail`
+    //     // <Link className={"email-details-link"} to={`/mail/${email.id}`}>
+    // }
 
         return <li className={className()} onClick={(e) => onUpdateEmailStatus(e, { isRead: true })}>
                 <img className="star-img" 

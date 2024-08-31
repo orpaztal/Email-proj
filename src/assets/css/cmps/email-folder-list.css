@@ -1,16 +1,56 @@
 .email-folder-list {
     display: flex;
     flex-direction: column;
-    background-color: lightgray;
+    align-items: flex-start;
+    margin-left: 20px;
+    padding-top: 20px;
 }
 
 .email-folder {
-    border: 2px solid black;
-    padding-bottom: 8px;
-    padding-top: 8px;
-    margin-top: 5px;
-    width: 80px;
-    text-align: center;
-    margin-left: 20px;
-    background-color: lightgray;
+    padding-top: 12px;
+    width: 100px;
+    display: flex;
+    text-align: left;
+    align-items: center;
+    align-content: center;
+}
+
+.folder-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.selected-folder {
+    background-color: #e8f0fe; /* Light blue background */
+    color: #1a73e8; /* Google blue text color */
+    font-weight: 500; /* Semi-bold text */
+    border-radius: 24px; /* Rounded corners for the item */
+    padding: 10px 20px; /* Padding inside the item */
+    display: flex; /* Flexbox layout for content */
+    align-items: center; /* Center content vertically */
+    margin-right: 8px; /* Add some margin on the right */
+    transition: background-color 0.2s ease; /* Smooth background transition */
+}
+
+.compose-btn {
+    background-color: #c2e7ff; /* Light blue background */
+    color: #040000; /* White text color */
+    font-size: 16px; /* Text size */
+    font-weight: bold; /* Bold text */
+    border: none; /* No border */
+    border-radius: 24px; /* Rounded corners */
+    padding: 12px 20px; /* Padding inside the button */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+    display: flex; /* Flexbox layout for content */
+    align-items: center; /* Center vertically */
+}
+
+.compose-icon {
+    margin-right: 8px; 
+    fill: #ffffff; /* White color for SVG icon */
+    width: 24px; /* Icon width */
+    height: 24px; /* Icon height */
 }

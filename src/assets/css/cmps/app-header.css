@@ -3,6 +3,8 @@
     color: white;
     padding-top: 20px;
     padding-left: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .app-header section.container {
@@ -30,4 +32,5 @@
 .header-buttons {
     margin-top: 10px;
     padding-bottom: 12px;
+    justify-content: center;
 }

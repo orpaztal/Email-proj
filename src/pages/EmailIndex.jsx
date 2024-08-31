@@ -19,6 +19,8 @@ export function EmailIndex() {
     const [ filterBy, setFilterBy ] = useState(emailService.getFilterFromSearchParams(searchParams))
 
     const onSetFilterByDebounce = useRef(utilService.debounce(onFilterBy, 400)).current
+    const onUpdateEmailDebounce = useRef(utilService.debounce(onUpdateEmail, 5000)).current
+
     const { folder, txt, isRead } = filterBy
 
     useEffect(() => {
@@ -46,8 +48,12 @@ export function EmailIndex() {
 
     async function onUpdateEmail(email) {
         try {
+            console.log("onUpdateEmail: ", email)
+
             const updatedEmail = await emailService.save(email)
-            setEmails(prevEmails=> prevEmails.map(curr=> curr.id === updatedEmail.id ? updatedEmail : curr))
+            console.log("onUpdateEmail updatedEmail: ", updatedEmail)
+
+            setEmails(prevEmails => prevEmails.map(curr=> curr.id === updatedEmail.id ? updatedEmail : curr))
         } catch (err) {
             console.log("failed to update", err);
         }
@@ -61,11 +67,9 @@ export function EmailIndex() {
             } else {
                 setEmails(emails => emails.map(email => email.id === newEmail.id ? newEmail : email))
             }
-            console.log("newEmail: ", newEmail)
             showSuccessMsg(`Email (${newEmail.id}) was sent successfully!`)
             navigate('/mail')
         } catch (err) {
-            console.log(err)            
             showErrorMsg('Couldnt send email')
         }
     }
@@ -94,7 +98,7 @@ export function EmailIndex() {
                 <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} unreadCount={count}/>
                 <EmailList emails={emails} onRemove={onRemove} onUpdateEmail={onUpdateEmail}/>
             </section>
-            <Outlet context={{ onSendMail }}/>
+            <Outlet context={{ onSendMail, onUpdateEmailDebounce }}/>
         </div>
     )
 }

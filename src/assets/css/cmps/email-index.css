@@ -1,8 +1,6 @@
 .email-list-and-folders {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    background-color: lightgray;
 }
 
 .email-details-title {
@@ -13,4 +11,11 @@
 .email-details-body {
     margin-top: 40px;
     margin-left: 20px;
+}
+
+.email-list {
+    flex: 1; /* Take the remaining width */
+    overflow-y: auto; /* Allow vertical scrolling for the email list */
+    padding: 10px; 
+    margin-right: 20px;
 }

@@ -1,13 +1,17 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useOutletContext } from "react-router-dom";
 import { emailService } from "../services/email.service"
 
 export function EmailComposer(){
-
     const [ email, setEmail ] = useState(emailService.createEmail())
-    const { onSendMail } = useOutletContext()
+    const { onSendMail, onUpdateEmailDebounce } = useOutletContext()
 
     const { to, subject, body } = email
+
+    // useEffect(() => {
+    //     console.log("composer onUpdateEmailDebounce: ", email)
+    //     onUpdateEmailDebounce(email)
+    // }, [email])
 
     function handleChange({ target }) {
         let { name: field, value, type } = target
@@ -22,7 +26,15 @@ export function EmailComposer(){
             default:
                 break;
         }
+        
         setEmail((prev) => ({ ...prev, [field]: value }))
+        
+        // setEmail((prev) => {
+        //     const updatedEmail = { ...prev, [field]: value };
+        //     console.log("composer onUpdateEmailDebounce: ", updatedEmail)
+        //     onUpdateEmailDebounce(updatedEmail);
+        //     return updatedEmail;
+        // });
     }
 
     function handleSubmit(ev) {
@@ -31,7 +43,6 @@ export function EmailComposer(){
     
         setEmail(updatedEmail);
         onSendMail(updatedEmail);
-        console.log("create email: ", updatedEmail)
     }
 
     return (
