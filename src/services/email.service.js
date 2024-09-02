@@ -19,15 +19,15 @@ const LOGGED_IN_USER_EMAIL = 'user@appsus.com'
 _createEmails()
 
 async function query(filterBy) {
-    let emails = await storageService.query(STORAGE_KEY)
+    let emails = await storageService.query(STORAGE_KEY);
 
     if (filterBy) {
-        let { folder = "inbox", txt = "", isRead = null } = filterBy
+        let { folder = "inbox", txt = "", isRead = null, sortField = "", sortOrder = "asc" } = filterBy;
 
         emails = emails.filter(email =>
             (isRead === null || email.isRead === isRead) &&
             (email.body?.toLowerCase().includes(txt.toLowerCase()) || email.subject?.toLowerCase().includes(txt.toLowerCase()))
-        )
+        );
 
         const filters = {
             inbox: email => email.to === LOGGED_IN_USER_EMAIL && email.removedAt === null,
@@ -36,10 +36,30 @@ async function query(filterBy) {
             trash: email => email.removedAt !== null,
             drafts: email => email.sentAt === null,
         };
-    
-        return folder ? emails.filter(filters[folder]) : emails;
+
+        emails = folder ? emails.filter(filters[folder]) : emails;
+
+        if (sortField) {
+            emails.sort((a, b) => {
+                let comparison = 0;
+
+                switch (sortField) {
+                    case 'date':
+                        comparison = new Date(a.sentAt) - new Date(b.sentAt);
+                        break;
+                    case 'subject':
+                        comparison = a.subject.localeCompare(b.subject);
+                        break;
+                    default:
+                        return 0; // No sorting
+                }
+
+                return sortOrder === 'desc' ? -comparison : comparison;
+            });
+        }
     }
-    return emails
+
+    return emails;
 }
 
 async function getUnreadCount() {
@@ -75,6 +95,8 @@ function getDefaultFilter() {
         folder: "inbox", 
         txt: "", 
         isRead: null,
+        sortField: "",  // 'date', 'subject'
+        sortOrder: "asc",  // 'asc' for ascending or 'desc' for descending
     }
 }
 

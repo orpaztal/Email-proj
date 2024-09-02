@@ -18,7 +18,7 @@
 
 .email-left {
     display: grid;
-    grid-template-columns: 200px 300px
+    grid-template-columns: 250px 800px
 }
 
 .star-img {
@@ -29,6 +29,7 @@
 
 .email-date {
     display: flex;
+    align-self: flex-end;
     /* margin-left: 100px; */
 }
 

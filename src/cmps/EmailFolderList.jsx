@@ -13,6 +13,14 @@ import pencil from '../assets/imgs/pencil.png'
 /* eslint-disable react/prop-types */
 export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
+    
+    const folders = [
+        { folder: "Inbox", img: inbox, count: unreadCount },
+        { folder: "Sent", img: sent },
+        { folder: "Starred", img: star },
+        { folder: "Trash", img: trash },
+        { folder: "Drafts", img: draft }
+    ];
 
     useEffect(() => {
         onFilterBy(filterByToEdit)
@@ -30,10 +38,14 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
                     />
             Compose </Link>
 
-        <EmailFolder folder={"Inbox"} img={inbox} onClick={() => onFolderPress("inbox")} count={unreadCount}/>
-        <EmailFolder folder={"Sent"} img={sent} onClick={() => onFolderPress("sent")}/>
-        <EmailFolder folder={"Starred"} img={star} onClick={() => onFolderPress("star")}/>
-        <EmailFolder folder={"Trash"} img={trash} onClick={() => onFolderPress("trash")}/>
-        <EmailFolder folder={"Drafts"} img={draft} onClick={() => onFolderPress("drafts")}/>
+        { folders.map(({ folder, img, count }) => (
+            <EmailFolder
+                key={folder}
+                folder={folder}
+                img={img}
+                onClick={() => onFolderPress(folder.toLowerCase())}
+                count={count}
+            />
+        )) }
     </section>
 }

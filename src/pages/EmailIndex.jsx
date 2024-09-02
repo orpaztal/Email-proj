@@ -8,6 +8,7 @@ import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service"
 import { EmailList } from "../cmps/EmailList.jsx"
 import { EmailFilter } from "../cmps/EmailFilter.jsx"
 import { EmailFolderList } from "../cmps/EmailFolderList.jsx"
+import { EmailSort } from "../cmps/EmailSort.jsx"
 
 /* eslint-disable react/prop-types */
 export function EmailIndex() {
@@ -21,7 +22,7 @@ export function EmailIndex() {
     const onSetFilterByDebounce = useRef(utilService.debounce(onFilterBy, 400)).current
     const onUpdateEmailDebounce = useRef(utilService.debounce(onUpdateEmail, 5000)).current
 
-    const { folder, txt, isRead } = filterBy
+    const { folder, txt, isRead, sortField, sortOrder } = filterBy
 
     useEffect(() => {
         loadEmails()
@@ -93,7 +94,8 @@ export function EmailIndex() {
 
     return (
         <div className="email-index">
-            <EmailFilter filterBy={{ txt, isRead }} onFilterBy={onSetFilterByDebounce}/>
+            <EmailFilter filterBy={{ txt, isRead, sortField, sortOrder }} onFilterBy={onSetFilterByDebounce}/>
+            <EmailSort filterBy={{ sortField, sortOrder }} onFilterBy={onFilterBy}/>
             <section className="email-list-and-folders">
                 <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} unreadCount={count}/>
                 <EmailList emails={emails} onRemove={onRemove} onUpdateEmail={onUpdateEmail}/>

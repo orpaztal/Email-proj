@@ -1,0 +1,57 @@
+.email-sort {
+    display: flex;
+    flex-direction: row;
+    width: 8000px;
+    margin: 0 auto;
+    margin-left: 20px;
+    margin-top: 10px;
+    font-family: Arial, sans-serif;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 9px;
+    margin-right: 10px;
+    color: #333;
+}
+
+.select-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+
+.select-wrapper .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+select {
+    width: 100%;
+    padding: 8px 12px 8px 32px; /* Add padding to make room for the icon */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+select option {
+    padding: 10px;
+}
+
+select:hover {
+    border-color: #007bff;
+}
