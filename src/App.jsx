@@ -7,7 +7,7 @@ import { EmailDetails } from "./pages/EmailDetails";
 import { UserMsg } from './cmps/UserMsg'
 import { EmailComposer } from "./cmps/EmailComposer";
 import { AppHeader } from "./cmps/AppHeader"
-import { EmailFolderList } from "./cmps/EmailFolderList";
+// import { EmailFolderList } from "./cmps/EmailFolderList";
 
 export function App() {
     return <Router>

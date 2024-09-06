@@ -20,17 +20,18 @@ export function EmailIndex() {
     const [ filterBy, setFilterBy ] = useState(emailService.getFilterFromSearchParams(searchParams))
 
     const onSetFilterByDebounce = useRef(utilService.debounce(onFilterBy, 400)).current
-    const onUpdateEmailDebounce = useRef(utilService.debounce(onUpdateEmail, 5000)).current
 
     const { folder, txt, isRead, sortField, sortOrder } = filterBy
 
     useEffect(() => {
-        loadEmails()
         setSearchParams(utilService.getExistingProperties(filterBy))
+        console.log("index serachParams: ", searchParams.toString())
+        loadEmails()
     }, [filterBy])
 
     useEffect(() => {
-        filterBy.folder === "inbox" && setCount(emails?.filter(email => !email.isRead).length);
+        // filterBy.folder === "inbox" && setCount(emails?.filter(email => !email.isRead).length);
+        filterBy.folder === "inbox" && setCount(emailService.getCountOfUnreadEmails())
     }, [emails])
 
     async function loadEmails() {
@@ -49,12 +50,10 @@ export function EmailIndex() {
 
     async function onUpdateEmail(email) {
         try {
-            console.log("onUpdateEmail: ", email)
-
             const updatedEmail = await emailService.save(email)
-            console.log("onUpdateEmail updatedEmail: ", updatedEmail)
-
             setEmails(prevEmails => prevEmails.map(curr=> curr.id === updatedEmail.id ? updatedEmail : curr))
+            
+            return updatedEmail
         } catch (err) {
             console.log("failed to update", err);
         }
@@ -100,7 +99,7 @@ export function EmailIndex() {
                 <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} unreadCount={count}/>
                 <EmailList emails={emails} onRemove={onRemove} onUpdateEmail={onUpdateEmail}/>
             </section>
-            <Outlet context={{ onSendMail, onUpdateEmailDebounce }}/>
+            <Outlet context={{ searchParams, onSendMail, onUpdateEmail }}/>
         </div>
     )
 }

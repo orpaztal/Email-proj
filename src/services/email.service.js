@@ -34,7 +34,7 @@ async function query(filterBy) {
             sent: email => email.to !== LOGGED_IN_USER_EMAIL && email.removedAt === null,
             star: email => email.isStarred === true && email.removedAt === null,
             trash: email => email.removedAt !== null,
-            drafts: email => email.sentAt === null,
+            drafts: email => email.sentAt === null && email.removedAt === null,
         };
 
         emails = folder ? emails.filter(filters[folder]) : emails;
@@ -81,11 +81,9 @@ function remove(id) {
 }
 
 function save(emailToSave) {
-    console.log("save: ", emailToSave)
     if (emailToSave.id) {
         return storageService.put(STORAGE_KEY, emailToSave)
     } else {
-        emailToSave.id = utilService.makeId()
         return storageService.post(STORAGE_KEY, emailToSave)
     }
 }
@@ -100,19 +98,19 @@ function getDefaultFilter() {
     }
 }
 
+// function getFilterFromParams(searchParams, folder) {
+//     const filterBy = {
+//         status: folder,
+//         txt: searchParams.get('txt') || '',
+//         isRead: JSON.parse(searchParams.get('isRead')),
+//         isStarred: searchParams.get('isStarred') || null,
+//         labels: searchParams.get('labels') || []
+//     }
+
+//     return filterBy
+// }
+
 function getFilterFromSearchParams(searchParams) {
-    // const defaultFilter = getDefaultFilter()
-    // const filterBy = {}
-
-    // for (const field in defaultFilter) {
-    //     filterBy[field] = searchParams.get(field) || (field === "isRead" ? null : "")
-    //     if (filterBy[field] === "null") {
-    //         filterBy[field] = null
-    //     }
-    // }
-
-    // return filterBy
-
     const filterBy = {};
 
     for (const [field] of Object.entries(getDefaultFilter())) {
@@ -124,6 +122,9 @@ function getFilterFromSearchParams(searchParams) {
 
         filterBy[field] = value !== null ? value : (field === "isRead" ? null : "");
     }
+
+    // const folder = searchParams.get('folder') || 'inbox'
+    // filterBy["folder"] = folder
 
     return filterBy;
 }

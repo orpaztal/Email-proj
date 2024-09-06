@@ -1,40 +1,44 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Link, useOutletContext } from "react-router-dom";
 import { emailService } from "../services/email.service"
 
 export function EmailComposer(){
     const [ email, setEmail ] = useState(emailService.createEmail())
-    const { onSendMail, onUpdateEmailDebounce } = useOutletContext()
+    const { searchParams, onSendMail, onUpdateEmail } = useOutletContext()
+    const timeoutRef = useRef(null)
+    
+    useEffect(() => {
+        console.log("composer searchParams: ", searchParams.toString());
+
+        const to = searchParams.get("to") || "";
+        const subject = searchParams.get("subject") || "";
+        const body = searchParams.get("body") || "";
+
+        setEmail(prevEmail => ({ ...prevEmail, to, subject, body }));
+    }, [searchParams]);
 
     const { to, subject, body } = email
 
-    // useEffect(() => {
-    //     console.log("composer onUpdateEmailDebounce: ", email)
-    //     onUpdateEmailDebounce(email)
-    // }, [email])
-
-    function handleChange({ target }) {
-        let { name: field, value, type } = target
-        switch (type) {
-            case 'number':
-            case 'range':
-                value = +value
-                break;
-            case 'checkbox':
-                value = target.checked
-                break
-            default:
-                break;
+    useEffect(() => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
         }
         
-        setEmail((prev) => ({ ...prev, [field]: value }))
-        
-        // setEmail((prev) => {
-        //     const updatedEmail = { ...prev, [field]: value };
-        //     console.log("composer onUpdateEmailDebounce: ", updatedEmail)
-        //     onUpdateEmailDebounce(updatedEmail);
-        //     return updatedEmail;
-        // });
+        timeoutRef.current = setTimeout(async () => {
+            const updatedEmail = await onUpdateEmail(email);
+            setEmail(updatedEmail);
+        }, 5000);
+
+        return () => clearTimeout(timeoutRef.current);
+    }, [email, onUpdateEmail]);
+
+    function handleChange({ target }) {
+        let { name: field, value, type } = target;
+        if (type === 'number' || type === 'range') value = +value;
+        else if (type === 'checkbox') value = target.checked;
+
+        setEmail(prev => ({ ...prev, [field]: value }));
     }
 
     function handleSubmit(ev) {

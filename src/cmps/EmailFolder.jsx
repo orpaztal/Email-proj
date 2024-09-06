@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
 export function EmailFolder({ folder, img, count, onClick }) {
