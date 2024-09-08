@@ -1,15 +1,31 @@
 import { useState, useEffect, useRef } from "react"
+import { useParams } from "react-router"
 import { Link, useOutletContext } from "react-router-dom";
 import { emailService } from "../services/email.service"
 
 export function EmailComposer(){
+    const { id } = useParams()
     const [ email, setEmail ] = useState(emailService.createEmail())
     const { searchParams, onSendMail, onUpdateEmail } = useOutletContext()
     const timeoutRef = useRef(null)
     
     useEffect(() => {
-        console.log("composer searchParams: ", searchParams.toString());
+        if (id) {
+            getEmail()
+        }
+    }, []);
 
+    async function getEmail(){
+        try {
+            const email = await emailService.getById(id)
+            setEmail(email)
+        } catch {
+            console.log("could not get email")
+        }
+    }
+    
+    useEffect(() => {
+        console.log("composer searchParams: ", searchParams.toString());
         const to = searchParams.get("to") || "";
         const subject = searchParams.get("subject") || "";
         const body = searchParams.get("body") || "";
