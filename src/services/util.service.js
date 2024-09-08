@@ -8,6 +8,34 @@ export const utilService = {
     loadFromStorage,
     getExistingProperties,
     debounce,
+    getUserCordinates,
+    animateCSS,
+}
+
+function getUserCordinates() {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude } = position.coords
+            resolve({ lat: latitude, lng: longitude })
+        }, reject)
+    })
+
+}
+
+function animateCSS(el, animation, isRemoveClass = true) {
+    const prefix = 'animate__'
+    return new Promise((resolve, reject) => {
+        const animationName = `${prefix}${animation}`
+        el.classList.add(`${prefix}animated`, animationName)
+
+        function handleAnimationEnd(event) {
+            event.stopPropagation()
+            if (isRemoveClass) el.classList.remove(`${prefix}animated`, animationName)
+            resolve('Animation ended')
+        }
+
+        el.addEventListener('animationend', handleAnimationEnd, { once: true })
+    })
 }
 
 function makeLorem(size = 100) {

@@ -67,3 +67,28 @@
     border: solid 3px hsl(230, 100%, 85%);
     border-radius: 10px;
 }
+
+.email-composer-to {
+    margin-right: 10px;
+}
+
+.email-composer-to-input {
+    margin-right: 50px;
+}
+
+.email-composer-subject-input{
+    margin-right: 50px;
+}
+
+.email-composer-body-input{
+    margin-right: 70px;
+    height: 120px;
+}
+
+.composer-back{
+    margin-bottom: 30px;
+}
+
+.email-send-mail{
+    margin-top: 20px;
+}

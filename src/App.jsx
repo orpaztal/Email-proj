@@ -1,4 +1,5 @@
 import { HashRouter as Router, Route, Routes } from "react-router-dom"
+import 'animate.css';
 
 import { Home } from './pages/Home';
 import { AboutUs } from "./pages/AboutUs";

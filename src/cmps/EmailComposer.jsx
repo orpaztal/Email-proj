@@ -4,6 +4,7 @@ import { Link, useOutletContext } from "react-router-dom";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { emailService } from "../services/email.service"
+import { utilService } from "../services/util.service";
 
 const validationSchema = Yup.object({
     to: Yup.string().email('Invalid email address').required('"To" is required'),
@@ -55,13 +56,19 @@ export function EmailComposer(){
         return () => clearTimeout(timeoutRef.current);
     }, [email, onUpdateEmail]);
 
-    // function handleChange({ target }) {
-    //     let { name: field, value, type } = target;
-    //     if (type === 'number' || type === 'range') value = +value;
-    //     else if (type === 'checkbox') value = target.checked;
-
-    //     setEmail(prev => ({ ...prev, [field]: value }));
-    // }
+    async function handleChange({ target }) {
+        let { name: field, value, type, checked } = target;
+        if (type === 'number' || type === 'range') value = +value;
+        else if (type === 'checkbox') {
+            if (checked) {
+                const { lat, lng } = await utilService.getUserCordinates()
+                value = { lat, lng }
+            } else {
+                value = null
+            }
+        }
+        setEmail(prev => ({ ...prev, [field]: value }));
+    }
 
     const handleSubmit = (values) => {
         const updatedEmail = { ...email, ...values, sentAt: new Date() };
@@ -71,8 +78,19 @@ export function EmailComposer(){
 
     return (
         <div className="composer">
-            <Link to="/mail">Back</Link>
+            <Link className="composer-back" to="/mail">Back</Link>
 
+            <div className='location'>
+                <input
+                    type='checkbox'
+                    name='location'
+                    id='location'
+                    checked={!!email.location}
+                    onChange={handleChange}
+                />
+                <label htmlFor='location'>Add my Location</label>
+            </div>
+                     
             <Formik
                 initialValues={{
                     to: email.to || '',

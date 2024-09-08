@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router"
 import { Link } from "react-router-dom"
-
 import { emailService } from '../services/email.service'
+
+import { GoogleMap } from '../cmps/GoogleMap'
 
 export function EmailDetails() {
   const { id } = useParams()
@@ -21,6 +22,10 @@ return <section className="email-details">
           <Link to="/mail">Back</Link>
           <h1 className='email-details-title'>{email?.subject}</h1>
           <h4 className='email-details-body'>{email?.body}</h4>
+          {/* {email.lat && email.lng && (
+              <GoogleMap lat={email.lat} lng={email.lng} />
+          )} */}
+          <GoogleMap/>
       </section>
 }
 
