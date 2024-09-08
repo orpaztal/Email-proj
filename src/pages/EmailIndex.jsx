@@ -30,9 +30,17 @@ export function EmailIndex() {
     }, [filterBy])
 
     useEffect(() => {
-        // filterBy.folder === "inbox" && setCount(emails?.filter(email => !email.isRead).length);
-        filterBy.folder === "inbox" && setCount(emailService.getCountOfUnreadEmails())
+        filterBy.folder === "inbox" && getUnReadCount()
     }, [emails])
+
+    async function getUnReadCount() {
+        try {
+            const unreadCount = await emailService.getUnreadCount()
+            setCount(unreadCount)
+        } catch (err) {
+            console.log('Had issues loading unreadCount', err);
+        }
+    }
 
     async function loadEmails() {
         try {

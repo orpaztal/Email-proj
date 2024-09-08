@@ -7,7 +7,6 @@ export const emailService = {
     remove,
     save,
     getDefaultFilter,
-    getCountOfUnreadEmails,
     getFilterFromSearchParams,
     getUnreadCount,
     createEmail,
@@ -69,11 +68,6 @@ async function getUnreadCount() {
 
 function getById(id) {
     return storageService.get(STORAGE_KEY, id)
-}
-
-async function getCountOfUnreadEmails() {
-    let emails = await storageService.query(STORAGE_KEY)
-    return emails.filter(email => !!email.isRead).length
 }
 
 function remove(id) {
