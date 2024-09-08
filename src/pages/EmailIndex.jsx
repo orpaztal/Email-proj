@@ -97,7 +97,7 @@ export function EmailIndex() {
             <EmailSort filterBy={{ sortField, sortOrder }} onFilterBy={onFilterBy}/>
             <section className="email-list-and-folders">
                 <EmailFolderList filterBy={{ folder }} onFilterBy={onSetFilterByDebounce} unreadCount={count}/>
-                <EmailList emails={emails} onRemove={onRemove} onUpdateEmail={onUpdateEmail}/>
+                <EmailList emails={emails} onRemove={onRemove} onUpdateEmail={onUpdateEmail} selectedFolder={filterBy.folder}/>
             </section>
             <Outlet context={{ searchParams, onSendMail, onUpdateEmail }}/>
         </div>

@@ -4,7 +4,7 @@ import yellowStar from '../assets/imgs/star-yellow.png'
 import star from '../assets/imgs/star.png'
 
 /* eslint-disable react/prop-types */
-    export function EmailPreview({ email, onRemove, onUpdateEmail }){
+    export function EmailPreview({ email, onRemove, onUpdateEmail, selectedFolder }){
 
     const date = new Date(email.sentAt);
     const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
@@ -23,6 +23,10 @@ import star from '../assets/imgs/star.png'
         onUpdateEmail(changedEmail);
     }
 
+    function onMailPressPath() {
+        return selectedFolder === "drafts" ? `/mail/compose/${email.id}` : `/mail/${email.id}`
+    }
+
         return <li className={className()} onClick={(e) => onUpdateEmailStatus(e, { isRead: true })}>
                 <img className="star-img" 
                     onClick={(e) => {
@@ -31,7 +35,7 @@ import star from '../assets/imgs/star.png'
                     src={email.isStarred ? yellowStar : star} 
                     alt=""
                 />
-                <Link className={"email-details-link"} to={`/mail/${email.id}`}>
+                <Link className={"email-details-link"} to={onMailPressPath()}>
                     <section className="email-left">
                         <p className="email-subject" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.subject}</p>
                         <p className="email-body" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.body}</p>
