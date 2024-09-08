@@ -43,6 +43,7 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
                 key={folder}
                 folder={folder}
                 img={img}
+                isSelected={filterByToEdit.folder === folder.toLocaleLowerCase()}
                 onClick={() => onFolderPress(folder.toLowerCase())}
                 count={count}
             />
