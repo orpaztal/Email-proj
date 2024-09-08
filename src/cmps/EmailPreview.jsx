@@ -37,8 +37,8 @@ import star from '../assets/imgs/star.png'
                 />
                 <Link className={"email-details-link"} to={onMailPressPath()}>
                     <section className="email-left">
-                        <p className="email-subject" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.subject}</p>
-                        <p className="email-body" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.body}</p>
+                        <p className="email-subject ellipsis-text" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.subject}</p>
+                        <p className="email-body ellipsis-text" style={{ fontWeight: email.isRead ? 'lighter' : 'bold' }}>{email.body}</p>
                     </section>
                     <p className="email-date">{formattedDate}</p>
                 </Link>

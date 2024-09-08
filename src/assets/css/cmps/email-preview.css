@@ -3,6 +3,15 @@
     flex-direction: row;
     border-bottom: 0.1px solid black;
     padding: 4px;
+    white-space: nowrap;       
+    overflow: hidden;          
+    text-overflow: ellipsis;
+}
+
+.ellipsis-text {
+    white-space: nowrap;       
+    overflow: hidden;          
+    text-overflow: ellipsis;
 }
 
 .email-preview.email-preview-unread {

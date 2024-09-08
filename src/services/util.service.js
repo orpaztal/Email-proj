@@ -1,10 +1,65 @@
 
 export const utilService = {
     makeId,
+    makeLorem,
+    getRandomIntInclusive,
+    padNum,
     saveToStorage,
     loadFromStorage,
     getExistingProperties,
     debounce,
+}
+
+function makeLorem(size = 100) {
+    var words = [
+        'sky',
+        'above',
+        'port',
+        'was',
+        'television',
+        'tuned',
+        'to',
+        'channel',
+        'all',
+        'baby',
+        'thing',
+        'happened',
+        'less',
+        'I',
+        'had',
+        'story',
+        'bit',
+        'people',
+        'and',
+        'generally',
+        'happens',
+        'cases',
+        'time',
+        'it',
+        'was',
+        'story',
+        'It',
+        'was',
+        'pleasure',
+        'to',
+        'burn',
+    ]
+    var txt = ''
+    while (size > 0) {
+        size--
+        txt += words[Math.floor(Math.random() * words.length)] + ' '
+    }
+    return txt.slice(0, -1)
+}
+
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function padNum(num) {
+    return num > 9 ? num + '' : '0' + num
 }
 
 function getExistingProperties(obj) {
