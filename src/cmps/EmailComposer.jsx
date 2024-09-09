@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react"
-import { useParams } from "react-router"
-import { Link, useOutletContext } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router";
+import { Link, useOutletContext, useSearchParams } from "react-router-dom";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { emailService } from "../services/email.service"
+import { emailService } from "../services/email.service";
 import { utilService } from "../services/util.service";
+import { TextField, Checkbox, Button, FormControlLabel } from '@mui/material';
 
 const validationSchema = Yup.object({
     to: Yup.string().email('Invalid email address').required('"To" is required'),
@@ -12,34 +13,35 @@ const validationSchema = Yup.object({
     body: Yup.string().required('"Body" is required'),
 });
 
-export function EmailComposer(){
-    const { id } = useParams()
-    const [ email, setEmail ] = useState(emailService.createEmail())
-    const { searchParams, onSendMail, onUpdateEmail } = useOutletContext()
-    const timeoutRef = useRef(null)
-    
+export function EmailComposer() {
+    const { id } = useParams();
+    const [email, setEmail] = useState(emailService.createEmail());
+    const { onSendMail, onUpdateEmail } = useOutletContext();
+    const [searchParams] = useSearchParams();
+    const timeoutRef = useRef(null);
+
     useEffect(() => {
         if (id) {
-            getEmail()
+            getEmail();
         }
     }, []);
 
-    async function getEmail(){
+    async function getEmail() {
         try {
-            const email = await emailService.getById(id)
-            setEmail(email)
+            const email = await emailService.getById(id);
+            console.log("get email, ", email);
+            setEmail(email);
         } catch {
-            console.log("could not get email")
+            console.log("could not get email");
         }
     }
-    
+
     useEffect(() => {
         console.log("composer searchParams: ", searchParams.toString());
-        const to = searchParams.get("to") || "";
-        const subject = searchParams.get("subject") || "";
-        const body = searchParams.get("body") || "";
+        const to = searchParams.get("to");
+        const subject = searchParams.get("subject");
 
-        setEmail(prevEmail => ({ ...prevEmail, to, subject, body }));
+        setEmail(prevEmail => ({ ...prevEmail, to, subject }));
     }, [searchParams]);
 
     useEffect(() => {
@@ -47,24 +49,26 @@ export function EmailComposer(){
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
-        
+
         timeoutRef.current = setTimeout(async () => {
             const updatedEmail = await onUpdateEmail(email);
+            console.log("updatedEmail: ", updatedEmail);
+
             setEmail(updatedEmail);
         }, 5000);
 
         return () => clearTimeout(timeoutRef.current);
-    }, [email, onUpdateEmail]);
+    }, [email]);
 
     async function handleChange({ target }) {
         let { name: field, value, type, checked } = target;
         if (type === 'number' || type === 'range') value = +value;
         else if (type === 'checkbox') {
             if (checked) {
-                const { lat, lng } = await utilService.getUserCordinates()
-                value = { lat, lng }
+                const { lat, lng } = await utilService.getUserCordinates();
+                value = { lat, lng };
             } else {
-                value = null
+                value = null;
             }
         }
         setEmail(prev => ({ ...prev, [field]: value }));
@@ -81,16 +85,18 @@ export function EmailComposer(){
             <Link className="composer-back" to="/mail">Back</Link>
 
             <div className='location'>
-                <input
-                    type='checkbox'
-                    name='location'
-                    id='location'
-                    checked={!!email.location}
-                    onChange={handleChange}
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            name="location"
+                            checked={!!email.location}
+                            onChange={handleChange}
+                        />
+                    }
+                    label="Add my Location"
                 />
-                <label htmlFor='location'>Add my Location</label>
             </div>
-                     
+
             <Formik
                 initialValues={{
                     to: email.to || '',
@@ -98,46 +104,62 @@ export function EmailComposer(){
                     body: email.body || ''
                 }}
                 validationSchema={validationSchema}
+                enableReinitialize={true}
                 onSubmit={handleSubmit}
             >
-                {({ errors, touched, isSubmitting }) => (
+                {({ errors, touched, isSubmitting, handleChange: formikHandleChange }) => (
                     <Form>
-                        <label className="email-composer-to" htmlFor="to">To:</label>
                         <Field
-                            className="email-composer-to-input"
-                            id="to"
                             name="to"
-                            type="text"
+                            as={TextField}
+                            label="To"
+                            fullWidth
+                            margin="normal"
+                            error={touched.to && !!errors.to}
+                            helperText={touched.to && errors.to}
+                            onChange={(e) => {
+                                formikHandleChange(e);
+                                handleChange(e);
+                            }}
                         />
-                        {errors.to && touched.to && (
-                            <div className="error-message">{errors.to}</div>
-                        )}
-
-                        <label className="email-composer-subject" htmlFor="subject">Subject:</label>
                         <Field
-                            className="email-composer-subject-input"
-                            id="subject"
                             name="subject"
-                            type="text"
+                            as={TextField}
+                            label="Subject"
+                            fullWidth
+                            margin="normal"
+                            error={touched.subject && !!errors.subject}
+                            helperText={touched.subject && errors.subject}
+                            onChange={(e) => {
+                                formikHandleChange(e);
+                                handleChange(e);
+                            }}
                         />
-                        {errors.subject && touched.subject && (
-                            <div className="error-message">{errors.subject}</div>
-                        )}
-
-                        <label className="email-composer-body" htmlFor="body">Message body:</label>
                         <Field
-                            className="email-composer-body-input"
-                            id="body"
                             name="body"
-                            as="textarea"
+                            as={TextField}
+                            label="Message Body"
+                            fullWidth
+                            margin="normal"
+                            multiline
+                            rows={4}
+                            error={touched.body && !!errors.body}
+                            helperText={touched.body && errors.body}
+                            onChange={(e) => {
+                                formikHandleChange(e);
+                                handleChange(e);
+                            }}
                         />
-                        {errors.body && touched.body && (
-                            <div className="error-message">{errors.body}</div>
-                        )}
 
-                        <button type="submit" className="email-send-mail" disabled={isSubmitting}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            disabled={isSubmitting}
+                        >
                             {isSubmitting ? 'Sending...' : 'Send'}
-                        </button>
+                        </Button>
                     </Form>
                 )}
             </Formik>

@@ -22,10 +22,9 @@ return <section className="email-details">
           <Link to="/mail">Back</Link>
           <h1 className='email-details-title'>{email?.subject}</h1>
           <h4 className='email-details-body'>{email?.body}</h4>
-          {/* {email.lat && email.lng && (
-              <GoogleMap lat={email.lat} lng={email.lng} />
-          )} */}
-          <GoogleMap/>
+          {email?.location && (
+              <GoogleMap lat={email.location.lat} lng={email.location.lng} />
+          )}
       </section>
 }
 

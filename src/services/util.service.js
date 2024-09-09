@@ -1,4 +1,3 @@
-
 export const utilService = {
     makeId,
     makeLorem,
@@ -24,7 +23,7 @@ function getUserCordinates() {
 
 function animateCSS(el, animation, isRemoveClass = true) {
     const prefix = 'animate__'
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const animationName = `${prefix}${animation}`
         el.classList.add(`${prefix}animated`, animationName)
 

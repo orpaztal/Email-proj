@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom";
-
+import { useEffectUpdate } from "../customHooks/useEffectUpdate";
 import { EmailFolder } from "./EmailFolder"
+import PropTypes from 'prop-types'
 
 import inbox from '../assets/imgs/inbox.png'
 import sent from '../assets/imgs/sent.png'
@@ -10,7 +11,6 @@ import trash from '../assets/imgs/trash.png'
 import draft from '../assets/imgs/draft.png'
 import pencil from '../assets/imgs/pencil.png'
 
-/* eslint-disable react/prop-types */
 export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
     
@@ -22,7 +22,7 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
         { folder: "Drafts", img: draft }
     ];
 
-    useEffect(() => {
+    useEffectUpdate(() => {
         onFilterBy(filterByToEdit)
     }, [filterByToEdit])
 
@@ -34,8 +34,7 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
         <Link className={"compose-btn"} to={"/mail/compose"}>
         <img className="compose-icon" 
                         src={pencil} 
-                        alt=""
-                    />
+                        alt=""/>
             Compose </Link>
 
         { folders.map(({ folder, img, count }) => (
@@ -49,4 +48,10 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
             />
         )) }
     </section>
+}
+
+EmailFolderList.propTypes = {
+    filterBy: PropTypes.object.isRequired, 
+    onFilterBy: PropTypes.func.isRequired,
+    unreadCount: PropTypes.number.isRequired,
 }

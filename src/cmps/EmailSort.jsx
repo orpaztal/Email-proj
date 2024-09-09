@@ -1,11 +1,12 @@
-/* eslint-disable react/prop-types */
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { FaSort, FaSortAlphaDown, FaSortAlphaUp } from 'react-icons/fa'; 
+import PropTypes from 'prop-types'
+import { useEffectUpdate } from "../customHooks/useEffectUpdate";
 
 export function EmailSort({ filterBy, onFilterBy }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
 
-    useEffect(() => {
+    useEffectUpdate(() => {
         onFilterBy(filterByToEdit)
     }, [filterByToEdit])
 
@@ -37,4 +38,9 @@ export function EmailSort({ filterBy, onFilterBy }) {
             </div>
         </div>
     );
+}
+
+EmailSort.propTypes = {
+    filterBy: PropTypes.object.isRequired, 
+    onFilterBy: PropTypes.func.isRequired,
 }

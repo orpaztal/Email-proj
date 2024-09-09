@@ -1,12 +1,13 @@
-/* eslint-disable react/prop-types */
-
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { Button } from '@mui/material';
+import { useEffectUpdate } from "../customHooks/useEffectUpdate";
+import PropTypes from 'prop-types'
 
 export function EmailFilter({ filterBy, onFilterBy }) {
     const [ filterByToEdit, setFilterByToEdit ] = useState(filterBy)
     const [ isRead, setIsRead ] = useState(filterBy.isRead)
 
-    useEffect(() => {
+    useEffectUpdate(() => {
         onFilterBy(filterByToEdit)
     }, [filterByToEdit])
 
@@ -42,9 +43,14 @@ export function EmailFilter({ filterBy, onFilterBy }) {
 
         <section>
             <label className="email-read-label">Filer Read/Unread emails</label>
-            <button className="email-read-button" onClick={onReadUnreadClick}>{btnName()}</button>
-            <button className="email-read-button" onClick={onAllClick}>All</button>
+            <Button className="email-read-button" variant="outlined" onClick={onReadUnreadClick}>{btnName()}</Button>
+            <Button className="email-read-button" variant="outlined" onClick={onAllClick}>All</Button>
         </section>
 
     </section>
+}
+
+EmailFilter.propTypes = {
+    filterBy: PropTypes.object.isRequired, 
+    onFilterBy: PropTypes.func.isRequired
 }

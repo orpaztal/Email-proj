@@ -10,7 +10,6 @@ import { EmailFilter } from "../cmps/EmailFilter.jsx"
 import { EmailFolderList } from "../cmps/EmailFolderList.jsx"
 import { EmailSort } from "../cmps/EmailSort.jsx"
 
-/* eslint-disable react/prop-types */
 export function EmailIndex() {
     const navigate = useNavigate()
     const [ searchParams, setSearchParams ] = useSearchParams()
@@ -25,7 +24,7 @@ export function EmailIndex() {
 
     useEffect(() => {
         setSearchParams(utilService.getExistingProperties(filterBy))
-        console.log("index serachParams: ", searchParams.toString())
+        console.log("Email index serachParams: ", searchParams.toString())
         loadEmails()
     }, [filterBy])
 
