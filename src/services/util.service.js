@@ -89,14 +89,32 @@ function padNum(num) {
     return num > 9 ? num + '' : '0' + num
 }
 
-function getExistingProperties(obj) {
+function getExistingProperties(obj, searchParams) {
     const truthyObj = {}
+ 
+    const searchParamsArr = searchParams.split('&');
+    const searchParamsObj = {};
+    searchParamsArr.forEach(param => {
+        const [key, value] = param.split('=');
+        if (key && value !== undefined && value !== '') {
+            searchParamsObj[key] = decodeURIComponent(value);
+        }
+    });
+
+    for (const key in searchParamsObj) {
+        const val = searchParamsObj[key];
+        if (val || typeof val === 'boolean') {
+            truthyObj[key] = val;
+        }
+    }
+
     for (const key in obj) {
         const val = obj[key]
         if (val || typeof val === 'boolean') {
             truthyObj[key] = val
         }
     }
+
     return truthyObj
 }
 

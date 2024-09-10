@@ -22,6 +22,6 @@ export const GoogleMap = ({ lat = 33, lng = 33 }) => {
 };
 
 GoogleMap.propTypes = {
-    lat: PropTypes.num.isRequired, 
-    lng: PropTypes.num.isRequired,
+    lat: PropTypes.number.isRequired, 
+    lng: PropTypes.number.isRequired,
 }

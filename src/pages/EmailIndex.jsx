@@ -23,8 +23,7 @@ export function EmailIndex() {
     const { folder, txt, isRead, sortField, sortOrder } = filterBy
 
     useEffect(() => {
-        setSearchParams(utilService.getExistingProperties(filterBy))
-        console.log("Email index serachParams: ", searchParams.toString())
+        setSearchParams(utilService.getExistingProperties(filterBy, searchParams.toString()))
         loadEmails()
     }, [filterBy])
 

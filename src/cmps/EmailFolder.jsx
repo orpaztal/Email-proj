@@ -20,6 +20,6 @@ EmailFolder.propTypes = {
     folder: PropTypes.string.isRequired, 
     img: PropTypes.string.isRequired,
     isSelected: PropTypes.bool.isRequired,
-    count: PropTypes.number.isRequired,
+    count: PropTypes.number,
     onClick: PropTypes.func.isRequired
 }

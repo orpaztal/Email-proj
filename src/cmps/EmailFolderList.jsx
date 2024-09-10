@@ -53,5 +53,5 @@ export function EmailFolderList({ filterBy, onFilterBy, unreadCount }) {
 EmailFolderList.propTypes = {
     filterBy: PropTypes.object.isRequired, 
     onFilterBy: PropTypes.func.isRequired,
-    unreadCount: PropTypes.number.isRequired,
+    unreadCount: PropTypes.number,
 }
